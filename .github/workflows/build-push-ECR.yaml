@@ -1,0 +1,75 @@
+name: Containerize and push to ECR.
+
+on:
+  push:
+    branches: ["main"]
+
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-west-1
+  REPOSITORY: elsapp1
+  K8S_NAMESPACE: staging
+  K8S_DEPLOYMENT_NAME: calculator-app-deployment
+
+jobs:
+
+  Package-Image-ECR:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@
+    #   with:
+    #     # Disabling shallow clone is recommended for improving relevancy of reporting
+    #     fetch-depth: 0
+    # - name: SonarQube Scan
+    #   uses: kitabisa/sonarqube-action@v1.2.0
+    #   with:
+    #     host: ${{ secrets.SONARQUBE_HOST }}
+    #     login: ${{ secrets.SONARQUBE_TOKEN }}
+    #     projectKey: "calculator-app analysis"
+   
+    # - name: Static code analysis with SonarQube  
+    #   run: mvn sonar:sonar -Dsonar.projectKey=${{secrets.SONAR_PROJECT_KEY}} -Dsonar.host.url=${{secrets.SONAR_HOST_URL}} -Dsonar.login=${{secrets.SONAR_LOGIN_TOKEN}}
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        REGISTRY: ${{ steps.login-ecr.outputs.registry }}        
+        REPOSITORY: elsapp1
+        #REGISTRY_ALIAS:
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+      
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        echo "IMAGE_TAG=${REPOSITORY}:${GITHUB.SHA}" >> $GITHUB_ENV
+
+    #echo "image=$REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+
+    # - name: Deploy to EKS
+    #   uses: kubectlp/kubectl@v1
+    #   with:
+    #     kubernetes-as-input: resource
+    #     args: apply -f deployment.yaml     
+     
+     #- name: Deploy to EKS
+      #run: |
+        #kubectl set image deployment/$K8S_DEPLOYMENT_NAME elsapp-cont=${{ steps.build-image.outputs.image }} --namespace $K8S_NAMESPACE
+        #kubectl rollout status deployment/$K8S_DEPLOYMENT_NAME --namespace $K8S_NAMESPACE
