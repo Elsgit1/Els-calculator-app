@@ -22,17 +22,18 @@ jobs:
       packages: write
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
 
     - name: SonarQube Scan
-      uses: kitabisa/sonarqube-action@v1.2.0
-      with:
-        host: ${{ secrets.SONARQUBE_HOST }}
-        login: ${{ secrets.SONARQUBE_TOKEN }}
+      uses: sonarsource/sonarqube-scan-action@v2.1.0 
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         projectKey: "calculator-app"
+        sonar.scanner.debug: true
    
     # - name: Static code analysis with SonarQube  
     #   run: mvn sonar:sonar -Dsonar.projectKey=${{secrets.SONAR_PROJECT_KEY}} -Dsonar.host.url=${{secrets.SONAR_HOST_URL}} -Dsonar.login=${{secrets.SONAR_LOGIN_TOKEN}}
