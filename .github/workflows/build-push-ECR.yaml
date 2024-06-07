@@ -159,4 +159,4 @@ jobs:
 
       - name: Update Manifest
         run: |
-          sed -i 's|image: .*|image: ${{ env.IMAGE_NAME }}|g' calc-app manifests/deployment.yaml
+          sed -i 's|image: .*|image: ${{ env.IMAGE_NAME }}|g' calc-app-manifests/deployment.yaml
