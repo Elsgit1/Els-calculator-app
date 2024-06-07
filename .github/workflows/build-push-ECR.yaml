@@ -152,3 +152,11 @@ jobs:
           docker push $ECR_REGISTRY/$APP_NAME:$IMAGE_TAG
           # Push the latest tag
           docker push $ECR_REGISTRY/$APP_NAME:latest
+
+  ###########################################################
+  ###            Update image name in manifest            ###
+  ###########################################################         
+
+      - name: Update Manifest
+        run: |
+          sed -i 's|image: .*|image: ${{ env.IMAGE_NAME }}|g' calc-app manifests/deployment.yaml
