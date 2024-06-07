@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calc-app-deployment
+  namespace: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      layer: frontend
+      app: calc-app
+  template:
+    metadata:
+      name: calc-app-pod
+      labels:
+        layer: frontend
+        app: calc-app
+    spec:
+      containers:
+      - name: calc-app-cont
+        image: ${{ env.IMAGE_TAG }}
+        ports:
+        - name: web
+          containerPort: 80
+          protocol: TCP
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "2"
+          limits:
+            memory: "270Mi"
+            cpu: "2"
