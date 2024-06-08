@@ -167,6 +167,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
           git add calc-app-manifests/deployment.yaml
           git commit -m "Updated image to $IMAGE_NAME"
           git push origin main
