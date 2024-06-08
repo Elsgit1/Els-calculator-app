@@ -165,10 +165,8 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
           git add calc-app-manifests/deployment.yaml
           git commit -m "Updated image to $IMAGE_NAME"
-          git push https://${{ secrets.ACCESS_TOKEN }}@github.com/Elsgit1/Els-calculator-app.git HEAD:main
+          git push https://${{ secrets.ACCESS_TOKEN }}@github.com/Elsgit1/Els-calculator-app/ HEAD:main
           
 
