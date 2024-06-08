@@ -164,6 +164,8 @@ jobs:
           sed -i 's|image: .*|image: $IMAGE_NAME|g' calc-app-manifests/deployment.yaml
 
       - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
           git add calc-app-manifests/deployment.yaml
           git commit -m "Updated image to $IMAGE_NAME"
