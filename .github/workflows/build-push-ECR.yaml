@@ -15,7 +15,10 @@ env:
 jobs:
     build-and-push:
       runs-on: ubuntu-latest
-  
+      permissions:
+            contents: read
+            packages: write
+
       steps:
       - name: Clone repo
         uses: actions/checkout@v4
@@ -167,6 +170,6 @@ jobs:
         run: |
           git add calc-app-manifests/deployment.yaml
           git commit -m "Updated image to $IMAGE_NAME"
-          git push https://${{ secrets.ACCESS_TOKEN }}@github.com/Elsgit1/Els-calculator-app/ HEAD:main
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/Elsgit1/Els-calculator-app/ HEAD:main
           
 
