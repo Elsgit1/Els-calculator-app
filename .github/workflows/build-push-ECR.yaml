@@ -160,9 +160,15 @@ jobs:
   ###            Update image name in manifest            ###
   ###########################################################         
 
+      - name: Clone repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Update Manifest
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
           sed -i 's|image: .*|image: $IMAGE_NAME|g' calc-app-manifests/deployment.yaml
 
@@ -170,6 +176,6 @@ jobs:
         run: |
           git add calc-app-manifests/deployment.yaml
           git commit -m "Updated image to $IMAGE_NAME"
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/Elsgit1/Els-calculator-app/ HEAD:main
+          git push origin main
           
 
