@@ -163,14 +163,18 @@ jobs:
       - name: Update Manifest
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ env.REPOSITORY }}
+          IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
-          sed -i 's|image: .*|image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g' calc-app-manifests/deployment.yaml
+          sed -i 's|image: .*|image: '"$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"'|g' calc-app-manifests/deployment.
+          echo "Updated deployment.yaml with $IMAGE_TAG"
 
       - name: Commit and push changes
         run: |
           git add calc-app-manifests/deployment.yaml
-          git commit -m "Updated image to $IMAGE_TAG"
+          git commit -m "Updated image to $IMAGE_NAME"
           git push origin main
           
 
