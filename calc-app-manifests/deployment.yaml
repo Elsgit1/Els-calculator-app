@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: calc-app-cont
-        image: 339713063356.dkr.ecr.us-west-1.amazonaws.com/calculator-app:v1.0.1
+        image: 339713063356.dkr.ecr.us-west-1.amazonaws.com/calculator-app:v1.0.2
         ports:
         - name: web
           containerPort: 80
