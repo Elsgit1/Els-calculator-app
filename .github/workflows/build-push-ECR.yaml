@@ -174,7 +174,7 @@ jobs:
       - name: Commit and push changes
         run: |
           git add calc-app-manifests/deployment.yaml
-          git commit -m "Updated image to $IMAGE_NAME"
+          git commit -m "Updated image to $IMAGE_TAG"
           git push origin main
           
 
