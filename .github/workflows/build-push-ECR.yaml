@@ -160,11 +160,6 @@ jobs:
   ###            Update image name in manifest            ###
   ###########################################################         
 
-      - name: Clone repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: Update Manifest
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
