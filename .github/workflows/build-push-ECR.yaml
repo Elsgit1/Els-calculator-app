@@ -168,8 +168,8 @@ jobs:
           IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
-          sed -i 's|image: .*|image: '"$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"'|g' calc-app-manifests/deployment.
-          echo "Updated deployment.yaml with $IMAGE_TAG"
+          sed -i 's|image: .*|image: '"$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"'|g' calc-app-manifests/deployment.yaml
+          echo "Updated deployment with $IMAGE_TAG"
 
       - name: Commit and push changes
         run: |
