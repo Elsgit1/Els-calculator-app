@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: calc-app-cont
-        image: ${{ env.IMAGE_NAME }}
+        image: $IMAGE_NAME
         ports:
         - name: web
           containerPort: 80
