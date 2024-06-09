@@ -57,7 +57,7 @@ jobs:
           # Get the latest tag, assume semver, and sort.
           LATEST_TAG=$(git tag -l | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n1)
           
-          # If there's no tag yet, start with v0.0.0. Used for new repos
+          # If there's no tag yet, start with v1.0.0.
           if [ -z "$LATEST_TAG" ]; then
             LATEST_TAG="v1.0.0"
           fi
@@ -150,11 +150,11 @@ jobs:
           # Tag the image with the app name and version
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$APP_NAME:$IMAGE_TAG
           # Tag the image as latest with the app name
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$APP_NAME:latest
+          # docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$APP_NAME:latest
           # Push the specific version tag
           docker push $ECR_REGISTRY/$APP_NAME:$IMAGE_TAG
           # Push the latest tag
-          docker push $ECR_REGISTRY/$APP_NAME:latest
+          # docker push $ECR_REGISTRY/$APP_NAME:latest
 
   ###########################################################
   ###            Update image name in manifest            ###
@@ -169,12 +169,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
           sed -i 's|image: .*|image: '"$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"'|g' calc-app-manifests/deployment.yaml
-          echo "Updated deployment with $IMAGE_TAG"
+          echo "Updated deployment image with ${{ env.IMAGE_TAG }}"
 
       - name: Commit and push changes
         run: |
           git add calc-app-manifests/deployment.yaml
-          git commit -m "Updated image to $IMAGE_TAG"
+          git commit -m "Updated deployment image to ${{ env.IMAGE_TAG }}"
           git push origin main
           
 
