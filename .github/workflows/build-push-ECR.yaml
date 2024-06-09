@@ -165,12 +165,12 @@ jobs:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
-          sed -i 's|image: .*|image: $IMAGE_NAME|g' calc-app-manifests/deployment.yaml
+          sed -i 's|image: .*|image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g' calc-app-manifests/deployment.yaml
 
       - name: Commit and push changes
         run: |
           git add calc-app-manifests/deployment.yaml
-          git commit -m "Updated image to $IMAGE_NAME"
+          git commit -m "Updated image to $IMAGE_TAG"
           git push origin main
           
 
